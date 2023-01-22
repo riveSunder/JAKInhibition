@@ -97,8 +97,8 @@ rfc3339-validator==0.1.4
 rfc3986-validator==0.1.1
 scipy==1.10.0
 Send2Trash==1.8.0
--e git+ssh://git@github.com/Cogibra/Sepia.git@9bde3fc724a55a2d2fcaeeed855b26eae3961fe3#egg=sepia
 six==1.16.0
+git+https://github.com/Cogibra/Sepia@6403477a390cd07c21e561cc7429560eac5a4449
 sniffio==1.3.0
 soupsieve==2.3.2.post1
 stack-data==0.6.2
