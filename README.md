@@ -1,6 +1,6 @@
 # Estimating inhibition metrics for JAK kinases
 
-![ inference example ](inference_example.png)
+![ inference example ](assets/inference_example.png)
 
 ## Summary
 
