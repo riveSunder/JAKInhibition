@@ -6,7 +6,6 @@ setup(\
         name="JAKInhibition", \
         version = "0.00", \
         install_requires =[\
-                "coverage==6.4.3",\
                 "numpy==1.23.1",\
                 ],\
         packages=find_packages(),\

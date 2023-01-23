@@ -1,4 +1,3 @@
-absl-py==1.4.0
 anyio==3.6.2
 argon2-cffi==21.3.0
 argon2-cffi-bindings==21.2.0
@@ -19,7 +18,6 @@ debugpy==1.6.5
 decorator==5.1.1
 defusedxml==0.7.1
 entrypoints==0.4
-etils==1.0.0
 executing==1.2.0
 fastjsonschema==2.16.2
 fonttools==4.38.0
@@ -32,8 +30,7 @@ ipython==8.8.0
 ipython-genutils==0.2.0
 ipywidgets==8.0.4
 isoduration==20.11.0
-jax==0.4.1
-jaxlib==0.4.1
+-e git+ssh://git@github.com/riveSunder/JAKInhibition.git@4b206e9a4a2716178c587e7de4048b7f8a8589e5#egg=JAKInhibition
 jedi==0.18.2
 Jinja2==3.1.2
 jsonpointer==2.3
@@ -43,7 +40,7 @@ jupyter-console==6.4.4
 jupyter-events==0.6.3
 jupyter_client==7.4.9
 jupyter_core==5.1.3
-jupyter_server==1.21
+jupyter_server==2.1.0
 jupyter_server_terminals==0.4.4
 jupyterlab-pygments==0.2.2
 jupyterlab-widgets==3.0.5
@@ -60,18 +57,14 @@ nest-asyncio==1.5.6
 notebook==6.5.2
 notebook_shim==0.2.2
 numpy==1.23.1
-nvidia-cublas-cu11==11.10.3.66
-nvidia-cuda-nvrtc-cu11==11.7.99
-nvidia-cuda-runtime-cu11==11.7.99
-nvidia-cudnn-cu11==8.5.0.96
-opt-einsum==3.3.0
 packaging==23.0
-pandas==1.5.2
+pandas==1.5.3
 pandocfilters==1.5.0
 parso==0.8.3
 pexpect==4.8.0
 pickleshare==0.7.5
 Pillow==9.4.0
+pkg_resources==0.0.0
 pkgutil_resolve_name==1.3.10
 platformdirs==2.6.2
 prometheus-client==0.15.0
@@ -94,16 +87,16 @@ rdkit==2022.9.3
 requests==2.28.2
 rfc3339-validator==0.1.4
 rfc3986-validator==0.1.1
-scipy==1.10.0
 Send2Trash==1.8.0
 six==1.16.0
-git+https://github.com/Cogibra/Sepia@a295731d327fab2619f9ed29b6211d830ee62d07
 sniffio==1.3.0
 soupsieve==2.3.2.post1
 stack-data==0.6.2
 terminado==0.17.1
 tinycss2==1.2.1
-torch==1.10.0
+torch==1.13.1+cu116
+torchaudio==0.13.1+cu116
+torchvision==0.14.1+cu116
 tornado==6.2
 traitlets==5.8.1
 typing_extensions==4.4.0
