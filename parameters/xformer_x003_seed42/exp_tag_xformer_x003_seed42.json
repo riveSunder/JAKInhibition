@@ -1,0 +1,1 @@
+{"batch_size": 16, "device": "cuda", "lr": 0.0003, "max_epochs": 300, "seed": 42, "tag": "x003", "x_data": "data/one_hot_smiles.npy"}

@@ -1,0 +1,1 @@
+{"batch_size": 64, "cohort_size": 10, "depth": 2, "device": "cuda", "lr": 3e-05, "max_epochs": 10000, "seed": 42, "tag": "ensemble_004", "x_data": "data/kinase_x.pt", "y_data": "data/kinase_y.pt"}

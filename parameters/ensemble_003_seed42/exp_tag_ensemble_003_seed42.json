@@ -1,0 +1,1 @@
+{"batch_size": 64, "cohort_size": 10, "depth": 2, "lr": 3e-05, "max_epochs": 10000, "seed": 42, "tag": "ensemble_003", "x_data": "data/kinase_x.npy", "y_data": "data/kinase_y.npy"}
