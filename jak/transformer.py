@@ -206,8 +206,6 @@ def train(**kwargs):
     x_data = torch.tensor(x_data, dtype=torch.float32).to(my_device)
     train_x = x_data[:-validation_size]
     val_x = x_data[-validation_size:]
-    print(x_data.shape)
-    print(train_x.shape, val_x.shape)
 
 
     # set up dataloaders
