@@ -1,5 +1,9 @@
 # Estimating inhibition metrics for JAK kinases
 
+Feature embedding from small molecule [SMILES](https://en.wikipedia.org/wiki/Simplified_molecular-input_line-entry_system) sequences with a from-scratch (starting with PyTorch) transformer model.
+
+The embeddings are used to predict the small molecule inhibition of [Janus (JAK) family kinases](https://en.wikipedia.org/wiki/Janus_kinase) kinases with bootstrap uncertainty from an ensemble of dense neural networks. 
+
 ![ inference example ](assets/inference_example.png)
 
 ## Summary
