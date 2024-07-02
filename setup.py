@@ -1,6 +1,5 @@
 from setuptools import setup, find_packages
 
-#  packages=["sepia", "testing"], \
 
 setup(\
         name="JAKInhibition", \
@@ -8,7 +7,7 @@ setup(\
         install_requires =[\
                 "numpy==1.23.1",\
                 ],\
-        packages=find_packages(),\
+        packages=["jak"], \
         description = "estimating inhibition metrics of small molecules for JAK kinases"
     )
 
