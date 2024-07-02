@@ -125,6 +125,7 @@ class MLPCohort(nn.Module):
             dont_care = 1.0 * (target_y == 0)
             do_care = 1.0 - dont_care
 
+        # sqrt of mean squared errer => mean absolute error. 
         loss = torch.sqrt(F.mse_loss(pred_y * do_care, target_y * do_care))
 
         return loss
@@ -162,7 +163,7 @@ class MLPCohort(nn.Module):
     def fit(self, dataloader, max_epochs, validation_dataloader=None, verbose=True):
 
         display_every = 1
-        save_every = max_epochs // 8
+        save_every = max(1,max_epochs // 8)
 
         smooth_loss = None
         # exponential averaging coefficient
