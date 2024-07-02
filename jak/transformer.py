@@ -20,21 +20,27 @@ class XFormer(nn.Module):
     def __init__(self, **kwargs):
         super().__init__()
 
-        encoder_layer = nn.TransformerEncoderLayer(d_model = 33, nhead=3, dim_feedforward=512)
-        decoder_layer = nn.TransformerDecoderLayer(d_model = 33, nhead=3, dim_feedforward=512)
+        self.batch_first = kwargs.get("batch_first", True) 
+
+        encoder_layer = nn.TransformerEncoderLayer(d_model = 36, nhead=12, \
+                dim_feedforward=512, batch_first=self.batch_first)
+        decoder_layer = nn.TransformerDecoderLayer(d_model = 36, nhead=12, \
+                dim_feedforward=512, batch_first=self.batch_first)
 
         self.encoder = nn.TransformerEncoder(encoder_layer, num_layers=4)
         self.decoder = nn.TransformerDecoder(decoder_layer, num_layers=4)
 
-        self.my_device = kwargs["device"]
-        self.mask_rate = torch.tensor(np.array([0.1])).to(self.my_device)
-        self.lr = kwargs["lr"]
-        self.tag = kwargs["tag"]
+        self.my_device = kwargs.get("device", "cpu")
+        self.mask_rate = kwargs.get("mask_rate", 0.2)
+        self.lr = kwargs.get("lr", 3e-4)
+        self.tag = kwargs.get("tag", "default_tag")
 
-        self.vocab = kwargs["vocab"]
+        # default vocab from Janus Kinase dataset
+        self.vocab = kwargs.get("vocab", "#()+-1234567=BCFHINOPS[]cilnors")
         self.token_dict = make_token_dict(self.vocab)
-        self.seq_length = 100
-        self.token_dim = 33
+
+        self.seq_length = kwargs.get("seq_length", 128)
+        self.token_dim = kwargs.get("token_dim", 36)
 
     def add_optimizer(self):
 
@@ -47,6 +53,33 @@ class XFormer(nn.Module):
 
         return x
 
+    def seq2seq(self, sequence: str) -> str:
+        """
+        autoencode/decode a string
+        """
+        # convert string sequence to numerical vector
+        tokens = sequence_to_vectors(sequence, self.token_dict, \
+                pad_to = self.seq_length)
+
+        one_hot = tokens_to_one_hot(tokens, pad_to = self.seq_length,\
+                pad_classes_to = self.token_dim)
+
+        one_hot = one_hot.to(self.my_device)
+
+        if self.batch_first:
+            pass
+        else:
+            one_hot = one_hot.permute(1,0,2)
+
+        encoded = self.encoder(one_hot)
+
+        decoded = self.decoder(one_hot, encoded)
+
+        decoded_sequence = one_hot_to_sequence(decoded, self.token_dict)  
+
+        return decoded_sequence
+
+
     def encode(self, sequence: str):
 
         # convert string sequence to numerical vector
@@ -57,6 +90,11 @@ class XFormer(nn.Module):
                 pad_classes_to = self.token_dim)
 
         one_hot = one_hot.to(self.my_device)
+        if self.batch_first:
+            pass
+        else:
+            one_hot = one_hot.permute(1,0,2)
+
         encoded = self.encoder(one_hot)
 
         return encoded
@@ -82,6 +120,7 @@ class XFormer(nn.Module):
 
         loss = F.cross_entropy(predicted, target)
 
+
         return loss
 
     def training_step(self, batch): 
@@ -100,10 +139,16 @@ class XFormer(nn.Module):
 
         sum_loss = 0.0
 
+
+
         with torch.no_grad():
             for ii, batch in enumerate(validation_dataloader):
+                if self.batch_first:
+                    validation_batch = batch[0]
+                else:
+                    validation_batch = batch[0].permute(1,0,2)
 
-                sum_loss += self.training_step(batch[0]).cpu()
+                sum_loss += self.training_step(validation_batch).cpu()
 
             mean_loss = sum_loss / (1+ii)
 
@@ -112,8 +157,8 @@ class XFormer(nn.Module):
     def fit(self, dataloader, max_epochs, validation_dataloader=None, verbose=True):
 
         self.add_optimizer()
-        display_every = 1
-        save_every = 50 #pochs // 1008
+        save_every = max(max_epochs // 8, 1)
+        display_every = save_every
 
         smooth_loss = None
         # exponential averaging coefficient
@@ -127,10 +172,15 @@ class XFormer(nn.Module):
             t1 = time.time()
             sum_loss = 0.0
             for batch_number, batch in enumerate(dataloader):
+                
+                if self.batch_first:
+                    training_batch = batch[0]
+                else:
+                    training_batch = batch[0].permute(1,0,2)
 
                 self.optimizer.zero_grad()
 
-                loss = self.training_step(batch[0])
+                loss = self.training_step(training_batch)
                 loss.backward()
 
                 self.optimizer.step()
@@ -160,7 +210,7 @@ class XFormer(nn.Module):
 
 
                 elapsed_total = t2 - t0
-                train_loss = self.validation(dataloader)
+                train_loss = self.validation(dataloader) 
                 msg = f"{epoch}, {elapsed_total:.5e}, {smooth_loss:.5e}, {train_loss:.5e}, "
 
                 if validation_dataloader is not None:
@@ -174,7 +224,7 @@ class XFormer(nn.Module):
 
                 print(msg)
 
-def train(**kwargs):
+def xformer_train(**kwargs):
 
     batch_size = kwargs["batch_size"]
     lr = kwargs["lr"]
@@ -208,12 +258,16 @@ def train(**kwargs):
     val_x = x_data[-validation_size:]
 
 
+
     # set up dataloaders
     train_dataset = torch.utils.data.TensorDataset(train_x)
     val_dataset = torch.utils.data.TensorDataset(val_x)
 
     train_dataloader = torch.utils.data.DataLoader(train_dataset, shuffle=True, batch_size=batch_size)
     val_dataloader = torch.utils.data.DataLoader(val_dataset, shuffle=False, batch_size=batch_size)
+
+    for batch in train_dataloader:
+        break
 
     smiles_vocab = "#()+-1234567=BCFHINOPS[]cilnors"
 
@@ -245,4 +299,4 @@ if __name__ == "__main__":
 
     kwargs = dict(args._get_kwargs())
 
-    train(**kwargs)
+    xformer_train(**kwargs)
