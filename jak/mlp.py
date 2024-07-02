@@ -220,7 +220,7 @@ class MLPCohort(nn.Module):
                 print(msg)
 
 
-def train(**kwargs):
+def mlp_train(**kwargs):
 
     batch_size = kwargs["batch_size"]
     cohort_size = kwargs["cohort_size"]
@@ -313,4 +313,4 @@ if __name__ == "__main__":
 
     kwargs = dict(args._get_kwargs())
 
-    train(**kwargs)
+    mlp_train(**kwargs)

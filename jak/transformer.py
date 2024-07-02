@@ -221,7 +221,8 @@ class XFormer(nn.Module):
 
                 print(msg)
 
-def train(**kwargs):
+def xformer_train(**kwargs):
+
     print("a")
 
     batch_size = kwargs["batch_size"]
@@ -297,4 +298,4 @@ if __name__ == "__main__":
 
     kwargs = dict(args._get_kwargs())
 
-    train(**kwargs)
+    xformer_train(**kwargs)
