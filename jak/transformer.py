@@ -20,7 +20,8 @@ class XFormer(nn.Module):
     def __init__(self, **kwargs):
         super().__init__()
 
-        self.batch_first = kwargs["batch_first"] if "batch_first" in kwargs.keys() else True 
+        self.batch_first = kwargs.get("batch_first", True) 
+
         encoder_layer = nn.TransformerEncoderLayer(d_model = 36, nhead=12, \
                 dim_feedforward=512, batch_first=self.batch_first)
         decoder_layer = nn.TransformerDecoderLayer(d_model = 36, nhead=12, \
@@ -29,15 +30,17 @@ class XFormer(nn.Module):
         self.encoder = nn.TransformerEncoder(encoder_layer, num_layers=4)
         self.decoder = nn.TransformerDecoder(decoder_layer, num_layers=4)
 
-        self.my_device = kwargs["device"]
-        self.mask_rate = torch.tensor(np.array([0.1])).to(self.my_device)
-        self.lr = kwargs["lr"]
-        self.tag = kwargs["tag"]
+        self.my_device = kwargs.get("device", "cpu")
+        self.mask_rate = kwargs.get("mask_rate", 0.2)
+        self.lr = kwargs.get("lr", 3e-4)
+        self.tag = kwargs.get("tag", "default_tag")
 
-        self.vocab = kwargs["vocab"]
+        # default vocab from Janus Kinase dataset
+        self.vocab = kwargs.get("vocab", "#()+-1234567=BCFHINOPS[]cilnors")
         self.token_dict = make_token_dict(self.vocab)
-        self.seq_length = kwargs["seq_length"] if "seq_length" in kwargs.keys() else 128 
-        self.token_dim = kwargs["token_dim"] if "token_dim" in kwargs.keys() else 36
+
+        self.seq_length = kwargs.get("seq_length", 128)
+        self.token_dim = kwargs.get("token_dim", 36)
 
     def add_optimizer(self):
 
@@ -51,7 +54,6 @@ class XFormer(nn.Module):
         return x
 
     def seq2seq(self, sequence: str) -> str:
-        import pdb; pdb.set_trace()
         """
         autoencode/decode a string
         """
@@ -222,8 +224,6 @@ class XFormer(nn.Module):
                 print(msg)
 
 def xformer_train(**kwargs):
-
-    print("a")
 
     batch_size = kwargs["batch_size"]
     lr = kwargs["lr"]
