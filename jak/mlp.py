@@ -163,7 +163,7 @@ class MLPCohort(nn.Module):
     def fit(self, dataloader, max_epochs, validation_dataloader=None, verbose=True):
 
         display_every = 1
-        save_every = max(1,max_epochs // 8)
+        save_every = max(1, max_epochs // 8)
 
         smooth_loss = None
         # exponential averaging coefficient

@@ -120,6 +120,7 @@ class XFormer(nn.Module):
 
         loss = F.cross_entropy(predicted, target)
 
+
         return loss
 
     def training_step(self, batch): 
@@ -156,8 +157,8 @@ class XFormer(nn.Module):
     def fit(self, dataloader, max_epochs, validation_dataloader=None, verbose=True):
 
         self.add_optimizer()
-        display_every = 1
-        save_every = 50 #pochs // 1008
+        save_every = max(max_epochs // 8, 1)
+        display_every = save_every
 
         smooth_loss = None
         # exponential averaging coefficient
